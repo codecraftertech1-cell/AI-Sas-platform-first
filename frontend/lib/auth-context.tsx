@@ -9,6 +9,7 @@ interface User {
   name: string | null;
   role: string;
   subscriptionPlan: string;
+  avatar?:string;
   credits: number;
 }
 

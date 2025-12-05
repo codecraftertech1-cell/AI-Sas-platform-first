@@ -58,7 +58,7 @@ export default function PricingPage() {
 
   const handleCheckout = async (plan: string) => {
     if (plan === 'FREE') {
-      toast.info('You are already on the Free plan');
+      toast.error('You are already on the Free plan');
       return;
     }
 

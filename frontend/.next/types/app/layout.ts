@@ -1,4 +1,4 @@
-// File: C:\wamp64\www\aisas\frontend\app\layout.tsx
+// File: C:\Users\PMYLS\Downloads\aisas-1\aisas\frontend\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
