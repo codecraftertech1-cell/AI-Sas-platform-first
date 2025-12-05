@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model chat {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String?
+  messages  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user user @relation("UserChats", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Chat_userId_idx")
+}
+
+model document {
+  id        String   @id @default(cuid())
+  userId    String
+  filename  String
+  fileUrl   String
+  fileType  String
+  fileSize  Int
+  content   String?
+  summary   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user user @relation("UserDocuments", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Document_userId_idx")
+}
+
+model invoice {
+  id              String       @id @default(cuid())
+  userId          String
+  stripeInvoiceId String?
+  amount          Float
+  currency        String       @default("usd")
+  status          String
+  plan            invoice_plan
+  createdAt       DateTime     @default(now())
+
+  user user @relation("UserInvoices", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Invoice_userId_idx")
+}
+
+model mobileapp {
+  id         String   @id @default(cuid())
+  userId     String
+  title      String
+  prompt     String
+  code       String
+  previewUrl String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user user @relation("UserMobileApps", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "MobileApp_userId_idx")
+}
+
+model presentation {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  slides      Json
+  exportedUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user user @relation("UserPresentations", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Presentation_userId_idx")
+}
+
+model usagelog {
+  id          String   @id @default(cuid())
+  userId      String
+  feature     String
+  creditsUsed Int
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  user user @relation("UserUsageLogs", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt], map: "UsageLog_createdAt_idx")
+  @@index([userId], map: "UsageLog_userId_idx")
+}
+
+model user {
+  id                   String                  @id @default(cuid())
+  email                String                  @unique(map: "User_email_key")
+  name                 String?
+  password             String
+  role                 user_role               @default(USER)
+  avatar               String?
+  subscriptionPlan     user_subscriptionPlan   @default(FREE)
+  subscriptionStatus   user_subscriptionStatus @default(ACTIVE)
+  credits              Int                     @default(100)
+  totalCreditsUsed     Int                     @default(0)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+
+  chats        chat[]        @relation("UserChats")
+  documents    document[]    @relation("UserDocuments")
+  presentations presentation[] @relation("UserPresentations")
+  websites     website[]     @relation("UserWebsites")
+  mobileApps   mobileapp[]   @relation("UserMobileApps")
+  invoices     invoice[]     @relation("UserInvoices")
+  usageLogs    usagelog[]    @relation("UserUsageLogs")
+}
+
+model website {
+  id         String   @id @default(cuid())
+  userId     String
+  title      String
+  prompt     String
+  code       String
+  previewUrl String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user user @relation("UserWebsites", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Website_userId_idx")
+}
+
+enum user_role {
+  USER
+  ADMIN
+}
+
+enum user_subscriptionPlan {
+  FREE
+  PAID
+  PRO
+}
+
+enum invoice_plan {
+  FREE
+  PAID
+  PRO
+}
+
+enum user_subscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  TRIAL
+}
