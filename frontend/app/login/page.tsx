@@ -36,18 +36,22 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50 px-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent mb-2">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-purple-900 px-4 sm:px-6 md:px-8">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-red-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      
+      <div className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 border border-white/20">
+        <div className="text-center mb-8 sm:mb-10">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent mb-2 sm:mb-3">
             Welcome Back
           </h1>
-          <p className="text-gray-600">Sign in to your account</p>
+          <p className="text-gray-300 text-sm sm:text-base">Sign in to your account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2 sm:mb-3">
               Email
             </label>
             <input
@@ -56,13 +60,13 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-white/10 border border-white/20 rounded-lg sm:rounded-xl text-white placeholder-gray-400 text-sm sm:text-base focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition backdrop-blur"
               placeholder="you@example.com"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-200 mb-2 sm:mb-3">
               Password
             </label>
             <input
@@ -71,7 +75,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition"
+              className="w-full px-4 sm:px-5 py-3 sm:py-3.5 bg-white/10 border border-white/20 rounded-lg sm:rounded-xl text-white placeholder-gray-400 text-sm sm:text-base focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition backdrop-blur"
               placeholder="••••••••"
             />
           </div>
@@ -79,16 +83,16 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 sm:py-3.5 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg sm:rounded-xl hover:from-red-600 hover:to-pink-600 active:from-red-700 active:to-pink-700 transition font-semibold disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base font-bold shadow-lg hover:shadow-xl"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600">
+        <div className="mt-6 sm:mt-8 text-center">
+          <p className="text-gray-300 text-sm sm:text-base">
             Don't have an account?{' '}
-            <Link href="/register" className="text-red-500 hover:text-red-600 font-semibold">
+            <Link href="/register" className="text-red-400 hover:text-red-300 font-semibold transition">
               Sign up
             </Link>
           </p>

@@ -96,61 +96,61 @@ export default function DashboardPage() {
 
   return (
     <Layout>
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-xl p-8 text-white">
-          <h1 className="text-3xl font-bold mb-2">Welcome back, {user?.name || 'User'}!</h1>
-          <p className="text-red-100">You have {user?.credits || 0} credits remaining</p>
+        <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-xl p-6 md:p-8 text-white">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Welcome back, {user?.name || 'User'}!</h1>
+          <p className="text-sm sm:text-base text-red-100">You have {user?.credits || 0} credits remaining</p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Credits</p>
-                <p className="text-2xl font-bold mt-1">{user?.credits || 0}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="bg-white rounded-lg shadow p-4 md:p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-gray-600 text-xs sm:text-sm truncate">Credits</p>
+                <p className="text-xl sm:text-2xl font-bold mt-1">{user?.credits || 0}</p>
               </div>
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-red-500" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Chats</p>
-                <p className="text-2xl font-bold mt-1">{displayStats.counts.chats || 0}</p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-green-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Documents</p>
-                <p className="text-2xl font-bold mt-1">{displayStats.counts.documents || 0}</p>
+          <div className="bg-white rounded-lg shadow p-4 md:p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-gray-600 text-xs sm:text-sm truncate">Chats</p>
+                <p className="text-xl sm:text-2xl font-bold mt-1">{displayStats.counts.chats || 0}</p>
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <FileText className="w-6 h-6 text-purple-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Projects</p>
-                <p className="text-2xl font-bold mt-1">
+          <div className="bg-white rounded-lg shadow p-4 md:p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-gray-600 text-xs sm:text-sm truncate">Documents</p>
+                <p className="text-xl sm:text-2xl font-bold mt-1">{displayStats.counts.documents || 0}</p>
+              </div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-4 md:p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-gray-600 text-xs sm:text-sm truncate">Projects</p>
+                <p className="text-xl sm:text-2xl font-bold mt-1">
                   {(displayStats.counts.presentations || 0) + (displayStats.counts.websites || 0) + (displayStats.counts.mobileApps || 0)}
                 </p>
               </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <Presentation className="w-6 h-6 text-orange-600" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Presentation className="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
               </div>
             </div>
           </div>
@@ -158,18 +158,18 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div>
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <h2 className="text-lg sm:text-xl font-semibold mb-3 md:mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
             {quickActions.map((action, index) => {
               const Icon = action.icon;
               return (
                 <button
                   key={index}
                   onClick={() => router.push(action.href)}
-                  className={`${action.color} text-white p-6 rounded-lg hover:opacity-90 transition transform hover:scale-105`}
+                  className={`${action.color} text-white p-4 sm:p-6 rounded-lg hover:opacity-90 transition transform hover:scale-105 flex flex-col items-center justify-center gap-2`}
                 >
-                  <Icon className="w-8 h-8 mb-2 mx-auto" />
-                  <p className="font-semibold">{action.name}</p>
+                  <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
+                  <p className="font-semibold text-xs sm:text-sm text-center">{action.name}</p>
                 </button>
               );
             })}
@@ -179,26 +179,26 @@ export default function DashboardPage() {
         {/* Recent Activity */}
         {displayStats.recentUsage && displayStats.recentUsage.length > 0 && (
           <div>
-            <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-gray-50">
+            <h2 className="text-lg sm:text-xl font-semibold mb-3 md:mb-4">Recent Activity</h2>
+            <div className="bg-white rounded-lg shadow overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Feature</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Credits Used</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th className="px-4 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase">Feature</th>
+                    <th className="px-4 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase">Credits</th>
+                    <th className="px-4 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase">Date</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {displayStats.recentUsage.map((usage: any, index: number) => (
-                    <tr key={index}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <tr key={index} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap font-medium text-gray-900">
                         {usage.feature}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-500">
                         {usage.creditsUsed}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-gray-500">
                         {new Date(usage.createdAt).toLocaleDateString()}
                       </td>
                     </tr>

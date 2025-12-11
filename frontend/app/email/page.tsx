@@ -17,7 +17,7 @@ export default function EmailPage() {
 
   const handleConnect = (provider: string) => {
     // In production, redirect to OAuth
-    toast.error(`${provider} OAuth integration required`);
+    toast.success(`${provider} OAuth integration required`);
     setConnected(true);
   };
 

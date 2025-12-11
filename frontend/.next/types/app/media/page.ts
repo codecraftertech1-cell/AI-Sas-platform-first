@@ -1,4 +1,4 @@
-// File: C:\Users\PMYLS\Downloads\aisas-1\aisas\frontend\app\media\page.tsx
+// File: C:\xampp\htdocs\aisas-1 (2)\aisas-1 (2)\aisas\frontend\app\media\page.tsx
 import * as entry from '../../../../app/media/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

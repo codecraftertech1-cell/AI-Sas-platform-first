@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/lib/auth-context';
 import { chatApi } from '@/lib/api';
-import { Send, Plus, Trash2, Download, Share2, Paperclip } from 'lucide-react';
+import { Send, Plus, Trash2, Download, Share2, Paperclip, ChevronLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import ReactMarkdown from 'react-markdown';
 
@@ -17,6 +17,8 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [streaming, setStreaming] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Desktop sidebar state
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false); // Mobile sidebar state
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -238,18 +240,23 @@ export default function ChatPage() {
     URL.revokeObjectURL(url);
   };
 
+  const handleSelectChat = (chat: any) => {
+    setSelectedChat(chat);
+    setMobileSidebarOpen(false);
+  };
+
   return (
     <Layout>
-      <div className="flex h-[calc(100vh-8rem)]">
-        {/* Sidebar */}
-        <div className="w-64 bg-white rounded-lg shadow mr-4 flex flex-col">
+      <div className="flex h-[calc(100vh-8rem)] gap-4 md:gap-0 -mx-4 md:mx-0 -mb-8 md:mb-0">
+        {/* Desktop Sidebar */}
+        <div className="hidden md:flex w-64 bg-white rounded-lg shadow flex-col flex-shrink-0">
           <div className="p-4 border-b border-gray-200">
             <button
               onClick={createNewChat}
-              className="w-full flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
             >
               <Plus className="w-4 h-4" />
-              New Chat
+              <span>New Chat</span>
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-2">
@@ -263,14 +270,14 @@ export default function ChatPage() {
                     : 'hover:bg-gray-50'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-sm truncate">{chat.title}</p>
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-medium text-sm truncate flex-1">{chat.title}</p>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       deleteChat(chat.id);
                     }}
-                    className="text-red-500 hover:text-red-700"
+                    className="text-red-500 hover:text-red-700 flex-shrink-0"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -283,133 +290,206 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Chat Area */}
-        <div className="flex-1 bg-white rounded-lg shadow flex flex-col">
-          {selectedChat ? (
-            <>
+        {/* Mobile Sidebar Overlay */}
+        {mobileSidebarOpen && (
+          <div className="fixed inset-0 z-40 md:hidden">
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setMobileSidebarOpen(false)}
+            />
+            <div className="relative w-64 h-full bg-white shadow-lg flex flex-col">
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 className="font-semibold">{selectedChat.title}</h3>
-                <div className="flex gap-2">
-                  <button
-                    onClick={exportChat}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition"
-                    title="Download chat"
-                  >
-                    <Download className="w-4 h-4" />
-                  </button>
-                  <button
-                    className="p-2 hover:bg-gray-100 rounded-lg transition"
-                    title="Share chat"
-                  >
-                    <Share2 className="w-4 h-4" />
-                  </button>
-                </div>
+                <h3 className="font-semibold">Chats</h3>
+                <button
+                  onClick={() => setMobileSidebarOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
               </div>
-
-              <div
-                ref={chatContainerRef}
-                className="flex-1 overflow-y-auto p-6 space-y-4"
-              >
-                {messages.map((message, index) => (
+              <div className="p-4 border-b border-gray-200">
+                <button
+                  onClick={() => {
+                    createNewChat();
+                    setMobileSidebarOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>New Chat</span>
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto p-2">
+                {chats.map((chat) => (
                   <div
-                    key={index}
-                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    key={chat.id}
+                    onClick={() => handleSelectChat(chat)}
+                    className={`p-3 rounded-lg cursor-pointer mb-2 transition ${
+                      selectedChat?.id === chat.id
+                        ? 'bg-red-50 border border-red-200'
+                        : 'hover:bg-gray-50'
+                    }`}
                   >
-                    <div
-                      className={`max-w-3xl rounded-lg p-4 ${
-                        message.role === 'user'
-                          ? 'bg-red-500 text-white'
-                          : 'bg-gray-100 text-gray-900'
-                      }`}
-                    >
-                      {message.role === 'assistant' ? (
-                        <ReactMarkdown className="prose prose-sm max-w-none">
-                          {message.content}
-                        </ReactMarkdown>
-                      ) : (
-                        <p className="whitespace-pre-wrap">{message.content}</p>
-                      )}
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-medium text-sm truncate flex-1">{chat.title}</p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteChat(chat.id);
+                        }}
+                        className="text-red-500 hover:text-red-700 flex-shrink-0"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {new Date(chat.updatedAt).toLocaleDateString()}
+                    </p>
                   </div>
                 ))}
-                {streaming && (
-                  <div className="flex justify-start">
-                    <div className="bg-gray-100 rounded-lg p-4">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-
-              <div className="p-4 border-t border-gray-200">
-                {selectedFile && (
-                  <div className="mb-2 flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-                    <span className="text-sm text-gray-600">{selectedFile.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedFile(null)}
-                      className="text-red-500 hover:text-red-700 text-sm"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                )}
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    sendMessage();
-                  }}
-                  className="flex gap-2"
-                >
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    className="hidden"
-                    accept=".pdf,.docx,.txt,image/*,video/*,audio/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (file) setSelectedFile(file);
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-                    title="Attach file"
-                  >
-                    <Paperclip className="w-5 h-5" />
-                  </button>
-                  <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Type your message..."
-                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none"
-                    disabled={loading}
-                  />
-                  <button
-                    type="submit"
-                    disabled={loading || !input.trim()}
-                    className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Send className="w-5 h-5" />
-                  </button>
-                </form>
-              </div>
-            </>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-500">
-              <div className="text-center">
-                <p className="text-lg mb-2">No chat selected</p>
-                <p className="text-sm">Create a new chat to get started</p>
               </div>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* Chat Area */}
+        <div className="flex-1 bg-white rounded-lg md:rounded-lg shadow flex flex-col min-w-0">{selectedChat ? (
+          <>
+            <div className="p-3 sm:p-4 border-b border-gray-200 flex items-center justify-between gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <button
+                  onClick={() => setMobileSidebarOpen(true)}
+                  className="md:hidden p-2 hover:bg-gray-100 rounded-lg flex-shrink-0"
+                >
+                  <Plus className="w-5 h-5" />
+                </button>
+                <h3 className="font-semibold text-sm sm:text-base truncate">
+                  {selectedChat.title}
+                </h3>
+              </div>
+              <div className="flex gap-1 flex-shrink-0">
+                <button
+                  onClick={exportChat}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition"
+                  title="Download chat"
+                >
+                  <Download className="w-4 h-4" />
+                </button>
+                <button
+                  className="p-2 hover:bg-gray-100 rounded-lg transition"
+                  title="Share chat"
+                >
+                  <Share2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div
+              ref={chatContainerRef}
+              className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4"
+            >
+              {messages.map((message, index) => (
+                <div
+                  key={index}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`w-full sm:max-w-sm md:max-w-2xl lg:max-w-3xl rounded-lg p-3 sm:p-4 ${
+                      message.role === 'user'
+                        ? 'bg-red-500 text-white'
+                        : 'bg-gray-100 text-gray-900'
+                    }`}
+                  >
+                    {message.role === 'assistant' ? (
+                      <ReactMarkdown className="prose prose-sm dark:prose-invert max-w-none text-xs sm:text-sm">
+                        {message.content}
+                      </ReactMarkdown>
+                    ) : (
+                      <p className="whitespace-pre-wrap text-xs sm:text-sm break-words">
+                        {message.content}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {streaming && (
+                <div className="flex justify-start">
+                  <div className="bg-gray-100 rounded-lg p-3 sm:p-4">
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="p-3 sm:p-4 border-t border-gray-200 flex-shrink-0 space-y-2">
+              {selectedFile && (
+                <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg text-xs sm:text-sm">
+                  <span className="text-gray-600 truncate flex-1">{selectedFile.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedFile(null)}
+                    className="text-red-500 hover:text-red-700 flex-shrink-0"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  sendMessage();
+                }}
+                className="flex gap-2"
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  className="hidden"
+                  accept=".pdf,.docx,.txt,image/*,video/*,audio/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) setSelectedFile(file);
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition flex-shrink-0"
+                  title="Attach file"
+                >
+                  <Paperclip className="w-4 sm:w-5 h-4 sm:h-5" />
+                </button>
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type message..."
+                  className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-sm"
+                  disabled={loading}
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !input.trim()}
+                  className="px-3 sm:px-6 py-2 sm:py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                >
+                  <Send className="w-4 sm:w-5 h-4 sm:h-5" />
+                </button>
+              </form>
+            </div>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-gray-500 p-4">
+            <div className="text-center">
+              <p className="text-base sm:text-lg mb-2">No chat selected</p>
+              <p className="text-xs sm:text-sm">Create a new chat to get started</p>
+            </div>
+          </div>
+        )}
         </div>
       </div>
     </Layout>

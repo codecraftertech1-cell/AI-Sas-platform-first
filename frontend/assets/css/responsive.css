@@ -1,0 +1,227 @@
+/* ================================
+   GLOBAL RESET + BASE
+================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  scroll-behavior: smooth;
+}
+
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ================================
+   CONTAINER SYSTEM
+================================ */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 768px) {
+  .container { padding: 0 24px; }
+}
+
+@media (min-width: 1024px) {
+  .container { max-width: 1200px; }
+}
+
+/* ================================
+   GRID SYSTEM
+================================ */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.col {
+  flex: 1 1 100%;
+  padding: 8px;
+}
+
+@media (min-width: 768px) {
+  .col-50 { flex: 0 0 50%; max-width: 50%; }
+  .col-33 { flex: 0 0 33.333%; max-width: 33.333%; }
+}
+
+@media (min-width: 1024px) {
+  .col-25 { flex: 0 0 25%; max-width: 25%; }
+}
+
+/* ================================
+   SIDEBAR + NAVBAR
+================================ */
+aside {
+  max-width: 100vw;
+}
+
+nav {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  aside {
+    width: 80% !important;
+  }
+}
+
+/* ================================
+   HEADER SAFE FIX
+================================ */
+header {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* ================================
+   CARDS
+================================ */
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+@media (min-width: 768px) {
+  .card { padding: 20px; }
+}
+
+/* ================================
+   FORMS
+================================ */
+input,
+textarea,
+select,
+button {
+  width: 100%;
+  max-width: 100%;
+  font-family: inherit;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ================================
+   TABLE RESPONSIVE
+================================ */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+/* ================================
+   AVATAR FIX
+================================ */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ================================
+   MOBILE SIDEBAR ANIMATION
+================================ */
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease forwards;
+}
+
+/* ================================
+   RESPONSIVE TEXT
+================================ */
+.res-title {
+  font-size: 22px;
+}
+
+@media (min-width: 768px) {
+  .res-title { font-size: 28px; }
+}
+
+@media (min-width: 1024px) {
+  .res-title { font-size: 32px; }
+}
+
+/* ================================
+   OVERFLOW FIXES
+================================ */
+section, main, div {
+  max-width: 100%;
+}
+
+/* ================================
+   SCROLLBAR STYLING
+================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e11d48;
+  border-radius: 10px;
+}
+
+/* ================================
+   DASHBOARD GRID FIX
+================================ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
